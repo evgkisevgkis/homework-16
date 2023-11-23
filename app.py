@@ -99,7 +99,7 @@ def get_user(uid):
     return one_user.to_dict()
 
 
-@app.route('/orders')
+@app.route('/orders', methods=['GET', 'POST'])
 def get_orders():
     if request.method == 'GET':
         orders = Order.query.all()
@@ -118,7 +118,7 @@ def get_order(oid):
     return one_order.to_dict()
 
 
-@app.route('/offers')
+@app.route('/offers', methods=['GET', 'POST'])
 def get_offers():
     if request.method == 'GET':
         offers = Offer.query.all()
