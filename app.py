@@ -79,5 +79,12 @@ def hello_world():  # put application's code here
     return 'Hello World!'
 
 
+@app.route('/users')
+def get_users():
+    users = User.query.all()
+    result = [usr.to_dict() for usr in users]
+    return result, 999
+
+
 if __name__ == '__main__':
     app.run()
