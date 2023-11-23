@@ -90,6 +90,7 @@ def get_users():
         user_data = json.loads(request.data)
         db.session.add(User(**user_data))
         db.session.commit()
+        return 'Пользователь добавлен'
 
 
 @app.route('/users/<uid>')
@@ -100,9 +101,15 @@ def get_user(uid):
 
 @app.route('/orders')
 def get_orders():
-    orders = Order.query.all()
-    result = [ordr.to_dict() for ordr in orders]
-    return result
+    if request.method == 'GET':
+        orders = Order.query.all()
+        result = [ordr.to_dict() for ordr in orders]
+        return json.dumps(result)
+    elif request.method == 'POST':
+        order_data = json.loads(request.data)
+        db.session.add(Order(**order_data))
+        db.session.commit()
+        return 'Заказ добавлен'
 
 
 @app.route('/orders/<oid>')
