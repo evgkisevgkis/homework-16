@@ -119,7 +119,7 @@ def get_orders():
     if request.method == 'GET':
         orders = Order.query.all()
         result = [ordr.to_dict() for ordr in orders]
-        return json.dumps(result)
+        return json.dumps(result, default=str, ensure_ascii=False)
     elif request.method == 'POST':
         order_data = json.loads(request.data)
         db.session.add(Order(**order_data))
