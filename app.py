@@ -14,10 +14,24 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(20))
     last_name = db.Column(db.String(20))
-    age =  db.Column(db.Integer)
+    age = db.Column(db.Integer)
     email = db.Column(db.String(20))
     role = db.Column(db.String(20))
     phone = db.Column(db.String(20))
+
+
+class Order(db.Model):
+    """Модель для заказов"""
+    __tablename__ = 'order'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    description = db.Column(db.String(100))
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+    address = db.Column(db.String(50))
+    price = db.Column(db.Integer(10))
+    customer_id = db.Column(db.Integer)
+    executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 @app.route('/')
