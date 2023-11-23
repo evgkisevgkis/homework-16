@@ -160,10 +160,18 @@ def get_offers():
         return 'Предложение добавлен'
 
 
-@app.route('/offers/<oid>')
+@app.route('/offers/<oid>', methods=['GET', 'PUT', 'DELETE'])
 def get_offer(oid):
     one_offer = Offer.query.get(oid)
-    return one_offer.to_dict()
+    if request.method == 'GET':
+        return one_offer.to_dict()
+    elif request.method == 'PUT':
+        offer_data = json.loads(request.data)
+        one_offer.order_id = offer_data['order_id']
+        one_offer.executor_id = offer_data['executor_id']
+    elif request.method == 'DELETE':
+        db.session.delete(one_offer)
+        db.session.commit()
 
 
 if __name__ == '__main__':
