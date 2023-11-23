@@ -127,10 +127,24 @@ def get_orders():
         return 'Заказ добавлен'
 
 
-@app.route('/orders/<oid>')
+@app.route('/orders/<oid>', methods=['GET', 'PUT', 'DELETE'])
 def get_order(oid):
     one_order = Order.query.get(oid)
-    return one_order.to_dict()
+    if request.method == 'GET':
+        return one_order.to_dict()
+    elif request.method == 'PUT':
+        order_data = json.loads(request.data)
+        one_order.name = order_data['name']
+        one_order.description = order_data['description']
+        one_order.start_date = order_data['start_date']
+        one_order.end_date = order_data['end_date']
+        one_order.address = order_data['address']
+        one_order.price = order_data['price']
+        one_order.customer_id = order_data['customer_id']
+        one_order.executor_id = order_data['executor_id']
+    elif request.method == 'DELETE':
+        db.session.delete(one_order)
+        db.session.commit()
 
 
 @app.route('/offers', methods=['GET', 'POST'])
