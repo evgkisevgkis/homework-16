@@ -83,7 +83,13 @@ def hello_world():  # put application's code here
 def get_users():
     users = User.query.all()
     result = [usr.to_dict() for usr in users]
-    return result, 999
+    return result
+
+
+@app.route('/users/<uid>')
+def get_user(uid):
+    one_user = User.query.get(uid)
+    return one_user.to_dict()
 
 
 if __name__ == '__main__':
