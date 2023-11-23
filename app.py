@@ -1,5 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from datas import users_data, orders_data, offers_data
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -40,6 +42,27 @@ class Offer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+with app.app_context():
+    db.create_all()
+
+    for user in users_data:
+        new_user = User(**user)
+        db.session.add(new_user)
+        db.session.commit()
+
+    for order in orders_data:
+        order['start_date'] = datetime.strptime(order['start_date'], '%m/%d/%Y').date()
+        order['end_date'] = datetime.strptime(order['end_date'], '%m/%d/%Y').date()
+        new_order = Order(**order)
+        db.session.add(new_order)
+        db.session.commit()
+
+    for offer in offers_data:
+        new_offer = Offer(**offer)
+        db.session.add(new_offer)
+        db.session.commit()
 
 
 @app.route('/')
