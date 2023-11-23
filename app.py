@@ -120,9 +120,15 @@ def get_order(oid):
 
 @app.route('/offers')
 def get_offers():
-    offers = Offer.query.all()
-    result = [ofr.to_dict() for ofr in offers]
-    return result
+    if request.method == 'GET':
+        offers = Offer.query.all()
+        result = [ofr.to_dict() for ofr in offers]
+        return json.dumps(result)
+    elif request.method == 'POST':
+        offer_data = json.loads(request.data)
+        db.session.add(Offer(**offer_data))
+        db.session.commit()
+        return 'Предложение добавлен'
 
 
 @app.route('/offers/<oid>')
