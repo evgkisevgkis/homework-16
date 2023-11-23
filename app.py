@@ -21,6 +21,9 @@ class User(db.Model):
     role = db.Column(db.String(20))
     phone = db.Column(db.String(20))
 
+    def to_dict(self):
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
+
 
 class Order(db.Model):
     """Модель для заказов"""
@@ -35,6 +38,9 @@ class Order(db.Model):
     customer_id = db.Column(db.Integer)
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    def to_dict(self):
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
+
 
 class Offer(db.Model):
     """Модель для предложений"""
@@ -42,6 +48,9 @@ class Offer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def to_dict(self):
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
 
 
 with app.app_context():
