@@ -92,5 +92,18 @@ def get_user(uid):
     return one_user.to_dict()
 
 
+@app.route('/orders')
+def get_orders():
+    orders = Order.query.all()
+    result = [ordr.to_dict() for ordr in orders]
+    return result
+
+
+@app.route('/orders/<oid>')
+def get_order(oid):
+    one_order = Order.query.get(oid)
+    return one_order.to_dict()
+
+
 if __name__ == '__main__':
     app.run()
