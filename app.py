@@ -105,5 +105,18 @@ def get_order(oid):
     return one_order.to_dict()
 
 
+@app.route('/offers')
+def get_offers():
+    offers = Offer.query.all()
+    result = [ofr.to_dict() for ofr in offers]
+    return result
+
+
+@app.route('/offers/<oid>')
+def get_offer(oid):
+    one_offer = Offer.query.get(oid)
+    return one_offer.to_dict()
+
+
 if __name__ == '__main__':
     app.run()
