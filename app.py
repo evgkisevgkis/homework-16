@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from datas import users_data, orders_data, offers_data
 from datetime import datetime
+import json
 
 
 app = Flask(__name__)
@@ -84,9 +85,9 @@ def get_users():
     if request.method == 'GET':
         users = User.query.all()
         result = [usr.to_dict() for usr in users]
-        return result
+        return json.dumps(result)
     elif request.method == 'POST':
-        user_data = request.data
+        user_data = json.loads(request.data)
         db.session.add(User(**user_data))
         db.session.commit()
 
