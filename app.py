@@ -34,6 +34,14 @@ class Order(db.Model):
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
+class Offer(db.Model):
+    """Модель для предложений"""
+    __tablename__ = 'offer'
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
+    executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
 @app.route('/')
 def hello_world():  # put application's code here
     return 'Hello World!'
