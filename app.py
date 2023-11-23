@@ -93,10 +93,25 @@ def get_users():
         return 'Пользователь добавлен'
 
 
-@app.route('/users/<uid>')
+@app.route('/users/<uid>', methods=['GET', 'PUT', 'DELETE'])
 def get_user(uid):
     one_user = User.query.get(uid)
-    return one_user.to_dict()
+    if request.method == 'GET':
+        return one_user.to_dict()
+    elif request.method == 'PUT':
+        user_data = json.loads(request.data)
+        one_user.first_name = user_data['first_name']
+        one_user.last_name = user_data['last_name']
+        one_user.age = user_data['age']
+        one_user.email = user_data['email']
+        one_user.role = user_data['role']
+        one_user.phone = user_data['phone']
+        db.session.add(one_user)
+        db.session.commit()
+        return 'Пользователь изменён'
+    elif request.method == 'DELETE':
+        db.session.delete(one_user)
+        db.session.commit()
 
 
 @app.route('/orders', methods=['GET', 'POST'])
