@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from datas import users_data, orders_data, offers_data
 from datetime import datetime
@@ -79,11 +79,16 @@ def hello_world():  # put application's code here
     return 'Hello World!'
 
 
-@app.route('/users')
+@app.route('/users', methods=['GET', 'POST'])
 def get_users():
-    users = User.query.all()
-    result = [usr.to_dict() for usr in users]
-    return result
+    if request.method == 'GET':
+        users = User.query.all()
+        result = [usr.to_dict() for usr in users]
+        return result
+    elif request.method == 'POST':
+        user_data = request.data
+        db.session.add(User(**user_data))
+        db.session.commit()
 
 
 @app.route('/users/<uid>')
